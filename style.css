@@ -1,0 +1,27 @@
+h1{
+   font-family: helvetica;
+}
+
+body {
+	background: #60AB67;
+}
+
+#dealer-hand {
+	height: 100px;
+	display: block;
+	border: 1px black solid;
+	padding: 5px;
+	margin: 5px;
+}
+#player-hand {
+	height: 100px;
+	display: block;
+	border: 1px black solid;
+	padding: 5px;
+	margin: 5px;
+}
+
+.card {
+	height: 100%;
+	display: inline-block;
+}
