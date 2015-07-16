@@ -3,6 +3,7 @@ h1{
 }
 
 body {
+	font-family: helvetica;
 	background: #60AB67;
 }
 
@@ -24,4 +25,5 @@ body {
 .card {
 	height: 100%;
 	display: inline-block;
+	margin: 0 2.5px 0 2.5px;
 }

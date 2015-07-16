@@ -1,4 +1,4 @@
-$(function(){
+// $(function(){
 
 var cardType =  [2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,"A","A","A","A","J","J","J","J","K","K","K","K","Q","Q","Q","Q"];
 var cardValue = [2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,1,1,1,1,10,10,10,10,10,10,10,10,10,10,10,10];
@@ -59,97 +59,38 @@ var cardImages = [
 var dealerCardsValue = 0;
 var playerCardsValue = 0;
 var arrayDeckOfCards = [];
-var playerHand;
-var dealerHand;
 
-//CARD CREATOR
+//*****CARD CREATOR*********
 var Card = function Card(cardType, cardValue, cardImage, cardId){
 	this.cardType = cardType;
 	this.cardValue = cardValue;
 	this.cardImage = cardImage;
 	this.cardId = cardId;
 }
-
 $.each(cardType, function(i, value, array){
 	var card = new Card(cardType[i], cardValue[i], cardImages[i], i);
 	arrayDeckOfCards.push(card);
 });
+//**************************
+$('#start-game').on("click", function(){
+	arrayDeckOfCards = shuffle(arrayDeckOfCards);
+	deal();
+	player.checksValueOfHand();
+	dealer.checksValueOfHand();
+}); 
 
-//PLAYER OBJECT
-var player = {
-	dollars : 1000,
-	arrayPlayerHand : [],
-	checksValueOfHand : function(){
-		console.log(player.arrayPlayerHand);
-		$.each(player.arrayPlayerHand, function(i, playerCard, array){
-		playerCardsValue = playerCardsValue + playerCard.cardValue;
-		});
-		console.log("playerHand is " + playerCardsValue);
-		$('#player-score').text(playerCardsValue);
-	},
-	nextMove : function(){},
-	//if card value === 21, notify player he got 21
-	//else offer choice of hit or stand
-	//visual que to user to ask for choice
-	//if stand, 
-		//run dealer choice method
-	//if hit, 
-		//run hit function, 
-		//run check value, if 21, notify of 21
-		//else if bust, notify of bust, game over
-		//else run userChoice function again
-	bets : function(){},
-	//bet method takes from player value and puts on table
-	dealToPlayer : function(){
-		var newPlayerCard = arrayDeckOfCards.pop();
-		console.log(newPlayerCard);
-		player.arrayPlayerHand.push(newPlayerCard);
-		$('div#player-hand').append('<div class="card"><img src="assets/card_images/' + newPlayerCard.cardImage + ' "class="card"></div>')
-		console.log(player.arrayPlayerHand);
-	}
-}
-player.checksValueOfHand();
-var deal = function deal(){
-	player.dealToPlayer();
-	dealer.dealToDealer();
-	player.dealToPlayer();
-	dealer.dealToDealer();
-};
-
-//DEALER OBJECT
-var dealer = {
-	arrayDealerHand : [],
-	checksValueOfHand : function(){
-		console.log(player.arrayPlayerHand);
-		$.each(dealer.arrayDealerHand, function(i, playerCard, array){
-			console.log(playerCard);
-			console.log(playerCard.cardValue);
-			dealerCardsValue = dealerCardsValue + playerCard.cardValue;
-		});
-		console.log("dealer Hand is " + dealerCardsValue);
-		$('#dealer-score').text(dealerCardsValue);
-	},
-	nextMove : function() {},
-	//method to move - logic: if > 17, stand; if < 17 hit.
-	dealToDealer : function (){
-		var newDealerCard = arrayDeckOfCards.pop();
-		console.log(newDealerCard);
-		this.arrayDealerHand.push(newDealerCard);
-		// console.log(arrayDeckOfCards.length);
-		$('div#dealer-hand').append('<div class="card"><img src="assets/card_images/' + newDealerCard.cardImage + ' "class="card"></div>')
-		console.log(this.arrayDealerHand);
-	}
+var playerChoices = function playerChoices(){
+	$('#player-choices').append('<button id="hit">hit</button><button id="stand">stand</button>');
+	$('#hit').on("click", function(event){
+		player.dealToPlayer();
+		player.checksValueOfHand();
+		player.nextMove();	
+	})
+	$('#stand').on("click", function(event){
+		dealer.choice();
+	})
 }
 
-//DEAL TO PLAYER FUNCTION
-
-dealer.checksValueOfHand();
-//DEAL TO DEALER FUNCTION
-
-
-//pops one card off the arrayDeckOfCards, pushes to dealerObj.arrayDealerHand
-//push div with arrayDealerHand[0], unique Id, corresponding image, 
-//SHUFFLE CARDS FUNCTION
 function shuffle(array) {
   var currentIndex = array.length;
   var temporaryValue;
@@ -167,19 +108,87 @@ function shuffle(array) {
   return array;
 }
 
-$('#start-game').on("click", function(){
-	arrayDeckOfCards = shuffle(arrayDeckOfCards);
-	deal();
-}); 
+var deal = function deal(){
+	player.dealToPlayer();
+	dealer.dealToDealer();
+	player.dealToPlayer();
+	dealer.dealToDealer();
+};
 
-//DEAL FUNCTION
+var player = {
+	dollars : 1000,
+	dealToPlayer : function(){
+		var newPlayerCard = arrayDeckOfCards.pop();
+		this.arrayPlayerHand.push(newPlayerCard);
+		$('div#player-hand').append('<div class="card"><img src="assets/card_images/' + newPlayerCard.cardImage + ' "class="card"></div>')
+	},
+	arrayPlayerHand : [],
+	checksValueOfHand : function(){
+		$.each(this.arrayPlayerHand, function(i, playerCard, array){
+			playerCardsValue = playerCardsValue + playerCard.cardValue;
+			});
+		$('#player-score').text(playerCardsValue);
+	},
+	firstMove : function(){
+		if (playerCardsValue === 21){
+			alert("you got 21!");
+		} else if (playerCardsValue < 21){
+			playerChoices();
+		}
+	},
+	nextMove : function(){
+		if (playerCardsValue < 21 ){
+			//get options
+		} else if (playerCardsValue > 21){
+			$('#status').text("you bust, sucka!");
+		}
+	},
+	
+	//run dealer choice method
+	//if hit, 
+		//run hit function, 
+		//run check value, if 21, notify of 21
+		//else if bust, notify of bust, game over
+		//else run userChoice function again
+	bets : function(){}
+	//bet method takes from player value and puts on table
+}
+player.firstMove();
 
+//DEALER OBJECT
+var dealer = {
+	arrayDealerHand : [],
+	checksValueOfHand : function(){
+		$.each(dealer.arrayDealerHand, function(i, playerCard, array){
+			dealerCardsValue = dealerCardsValue + playerCard.cardValue;
+		});
+		$('#dealer-score').text(dealerCardsValue);
+	},
+	nextMove : function() {},
+	//method to move - logic: if > 17, stand; if < 17 hit.
+	dealToDealer : function (){
+		var newDealerCard = arrayDeckOfCards.pop();
+		this.arrayDealerHand.push(newDealerCard);
+		// console.log(arrayDeckOfCards.length);
+		$('div#dealer-hand').append('<div class="card"><img src="assets/card_images/' + newDealerCard.cardImage + ' "class="card"></div>')
+	},
+	choice : function (){
+		// this.checksValueOfHand();
+		console.log(dealerCardsValue);
 
+		if(dealerCardsValue < 17){
+			this.dealToDealer();
+			this.checksValueOfHand();
+		} else if (dealerCardsValue > 17){
+			console.log("dealers ovrer 17");
+			$('#status').text("dealer stands, sucka!");
+		} else if (dealerCardsValue === 21){
+			console.log("dealers  21");
+			$('#status').text("dealer got a natch, sucka!");
+		}
+	}
+}
 
-
-//HIT FUNCTION 
-//runs dealToPlayer
-// console.log(arrayDeckOfCards.length);
 
 //GET WINNER FUNCTION
 //if tie - end game notify player else
@@ -194,4 +203,4 @@ $('#start-game').on("click", function(){
 //DEALERWINS FUNCTION
 //notification, visuals of dealer win
 	
-})
+// })
