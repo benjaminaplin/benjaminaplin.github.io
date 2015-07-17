@@ -1,5 +1,3 @@
-// $(function(){
-console.log("linksters");
 var cardType =  [2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,"A","A","A","A","J","J","J","J","K","K","K","K","Q","Q","Q","Q"];
 var cardValue = [2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,1,1,1,1,10,10,10,10,10,10,10,10,10,10,10,10];
 var cardImages = [
@@ -75,21 +73,10 @@ $.each(cardType, function(i, value, array){
 $('#deal').on("click", function(){
 	arrayDeckOfCards = shuffle(arrayDeckOfCards);
 	deal();
-	player.checksValueOfHand();
+	player.checksValueOfHand();//*******************************<<<<<<<<<<
 	dealer.checksValueOfHand();
+	player.choice();//*******************************<<<<<<<<<<PROBLEM HERE IS WHERE CHECKSVALUE OF HAND GETS TRICKY
 }); 
-
-var playerChoices = function playerChoices(){
-	$('#player-choices').append('<button id="hit">hit</button><button id="stand">stand</button>');
-	$('#hit').on("click", function(event){
-		player.dealToPlayer();
-		player.checksValueOfHand();
-		player.nextMove();	
-	})
-	$('#stand').on("click", function(event){
-		dealer.choice();
-	})
-}
 
 function shuffle(array) {
   var currentIndex = array.length;
@@ -115,17 +102,31 @@ var deal = function deal(){
 	dealer.dealToDealer();
 };
 
+var newHand = function newHand() {
+	player.arrayPlayerHand = [];
+	$('div#player-hand').empty();
+	playerCardsValue = 0;
+
+	dealer.arrayDealerHand = [];
+	$('div#dealer-hand').empty();
+	dealerCardsValue = 0;
+
+	deal();
+	
+	player.checksValueOfHand();
+	dealer.checksValueOfHand();
+	// debugger
+}
+
+
+
 var player = {
 	dollars : 1000,
-	dealToPlayer : function(){
-		var newPlayerCard = arrayDeckOfCards.pop();
-		this.arrayPlayerHand.push(newPlayerCard);
-		$('div#player-hand').append('<div class="card"><img src="assets/card_images/' + newPlayerCard.cardImage + ' "class="card"></div>');		
-	},
 	arrayPlayerHand : [],
 	checksValueOfHand : function(){
+		playerCardsValue = 0;
 		$.each(this.arrayPlayerHand, function(i, playerCard, array){
-			playerCardsValue = playerCardsValue + playerCard.cardValue;
+			playerCardsValue += playerCard.cardValue;
 			});
 		$('#player-score').text(playerCardsValue);
 	},
@@ -133,14 +134,14 @@ var player = {
 		if (playerCardsValue === 21){
 			$('#status').text("you got 21!");
 		}
-		if (playerCardsValue < 21){
-			playerChoices();
-			$('#status').text("hit or stand??")			
+		if (playerCardsValue > 0 && playerCardsValue < 21){
+			this.choice();
+			$('#status').text("hit or stand??");			
 		}
 	},
 	nextMove : function(){
 		if (playerCardsValue < 21 ){
-			$('#status').text("hit or stand??")			
+			$('#status').text("hit or stand??");		
 		}
 		if (playerCardsValue > 21){
 			$('#status').text("you bust, sucka!");
@@ -150,13 +151,30 @@ var player = {
 			$('#status').text("you got 21!");
 		}
 	},
+	dealToPlayer : function(){
+		var newPlayerCard = arrayDeckOfCards.pop();
+		this.arrayPlayerHand.push(newPlayerCard);
+		$('div#player-hand').append('<div class="card"><img src="assets/card_images/' + newPlayerCard.cardImage + ' "class="card"></div>');		
+	},
+	choice : function(){
+		$('#player-choices').append('<button id="hit">hit</button><button id="stand">stand</button>');
+		$('#hit').on("click", function(event){
+			player.dealToPlayer();
+			player.checksValueOfHand();//*******************************<<<<<<<<<<
+			player.nextMove();	
+		})
+		$('#stand').on("click", function(event){
+			dealer.choice();
+		})
+		$('#status').text("hit or stand??");			
+	},
 	bets : function(){},
 	wins : function(){
-		console.log("plaeyer winss!!!!")
-		playerWinsModal();
+		console.log("player wins function fired")
+		playerWinsModalDiv();
 	},
 	lose : function(){
-		playerLoseModal();
+		playerLoseModalDiv();
 	}
 	//bet method takes from player value and puts on table
 }
@@ -166,67 +184,64 @@ player.firstMove();
 var dealer = {
 	arrayDealerHand : [],
 	checksValueOfHand : function(){
+		dealerCardsValue = 0;		
 		$.each(dealer.arrayDealerHand, function(i, playerCard, array){
 			dealerCardsValue = dealerCardsValue + playerCard.cardValue;
 		});
 		$('#dealer-score').text(dealerCardsValue);
 	},
-	nextMove : function() {},
-	//method to move - logic: if > 17, stand; if < 17 hit.
 	dealToDealer : function (){
 		var newDealerCard = arrayDeckOfCards.pop();
 		this.arrayDealerHand.push(newDealerCard);
-		// console.log(arrayDeckOfCards.length);
 		$('div#dealer-hand').append('<div class="card"><img src="assets/card_images/' + newDealerCard.cardImage + ' "class="card"></div>')
 	},
 	choice : function (){
-		console.log(dealerCardsValue);
-		// for (var i = 0; i < 3; i++) {
-			// console.log(i);
-			if(dealerCardsValue <= 17){
-				this.dealToDealer();
-				this.checksValueOfHand();
-				console.log("<=17 dealer takes a card");
-			}
-			if (dealerCardsValue > 17 && dealerCardsValue < 21){
-				console.log("dealers ovrer 17 and under 21");
-				$('#status').text("dealer stands, hit again?");
-			}
-			if (dealerCardsValue > 21){
-				console.log("dealer busters");
-				$('#status').text("dealer BUSTS");
-				player.wins();
-			}
-			if (dealerCardsValue === 21){
-				console.log("dealers  21");
-				$('#status').text("dealer got a natch, sucka!");
-			}
-	 // }
-   }
+		if(dealerCardsValue <= 17){
+			this.dealToDealer();
+			this.checksValueOfHand();
+			console.log("<=17 dealer takes a card");
+		}
+		if (dealerCardsValue > 17 && dealerCardsValue < 21){
+			console.log("dealers ovrer 17 and under 21");
+			$('#status').text("dealer stands, hit again?");
+		}
+		if (dealerCardsValue > 21){
+			console.log("dealer busters");
+			$('#status').text("dealer BUSTS");
+			player.wins();
+		}
+		if (dealerCardsValue === 21){
+			console.log("dealers  21");
+			$('#status').text("dealer got a natch, sucka!");
+		}
+    }
 }
 
-var playerWinsModal = function playerWinsModal(){
-	var modal = $('#player-wins-modal');
-	var closeButton = $('#new-hand-player-wins-modal')	
-	modal.toggle();
-	closeButton.on('click', function(event){
-	modal.toggle();
-	})
+var playerWinsModalDiv = function playerWinsModalDiv(){
+	playerWinsModal.toggle();
 }
-var playerLoseModal = function playerLoseModal(){
-	var modal = $('#player-lose-modal');
-	var closeButton = $('#new-hand-player-lose-modal')	
 
-	modal.toggle();
-	closeButton.on('click', function(event){
-	modal.toggle();
+var playerWinsModal = $('#player-wins-modal');
+var newHandButton = $('#new-hand-player-wins-modal')	
+newHandButton.on('click', function(event){
+	console.log("clicked new hand button");
+	playerWinsModal.toggle();
+	newHand();
 })
+
+var playerLoseModalDiv = function playerLoseModalDiv(){
+	playerLoseModal.toggle();
 }
 
-//PLAYERWINS FUNCTION
-//notification, visuals of player win
+var playerLoseModal = $('#player-lose-modal');
+var newHandButton = $('#new-hand-player-lose-modal')	
+newHandButton.on('click', function(event){
+		// debugger
+    playerLoseModal.toggle();
+    newHand();
+})
 
-//DEALERWINS FUNCTION
-//notification, visuals of dealer win
-	
-// })
+
+
+
+
