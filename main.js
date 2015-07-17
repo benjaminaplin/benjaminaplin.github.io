@@ -120,7 +120,7 @@ var player = {
 	dealToPlayer : function(){
 		var newPlayerCard = arrayDeckOfCards.pop();
 		this.arrayPlayerHand.push(newPlayerCard);
-		$('div#player-hand').append('<div class="card"><img src="assets/card_images/' + newPlayerCard.cardImage + ' "class="card"></div>')
+		$('div#player-hand').append('<div class="card"><img src="assets/card_images/' + newPlayerCard.cardImage + ' "class="card"></div>');		
 	},
 	arrayPlayerHand : [],
 	checksValueOfHand : function(){
@@ -131,18 +131,23 @@ var player = {
 	},
 	firstMove : function(){
 		if (playerCardsValue === 21){
-			alert("you got 21!");
-		} else if (playerCardsValue < 21){
+			$('#status').text("you got 21!");
+		}
+		if (playerCardsValue < 21){
 			playerChoices();
+			$('#status').text("hit or stand??")			
 		}
 	},
 	nextMove : function(){
 		if (playerCardsValue < 21 ){
-			//get options
+			$('#status').text("hit or stand??")			
 		}
 		if (playerCardsValue > 21){
 			$('#status').text("you bust, sucka!");
 			player.lose();
+		}
+		if (playerCardsValue === 21){
+			$('#status').text("you got 21!");
 		}
 	},
 	bets : function(){},
@@ -185,7 +190,7 @@ var dealer = {
 			}
 			if (dealerCardsValue > 17 && dealerCardsValue < 21){
 				console.log("dealers ovrer 17 and under 21");
-				$('#status').text("dealer stands");
+				$('#status').text("dealer stands, hit again?");
 			}
 			if (dealerCardsValue > 21){
 				console.log("dealer busters");
@@ -202,7 +207,7 @@ var dealer = {
 
 var playerWinsModal = function playerWinsModal(){
 	var modal = $('#player-wins-modal');
-	var closeButton = $('#close-player-wins-modal')	
+	var closeButton = $('#new-hand-player-wins-modal')	
 	modal.toggle();
 	closeButton.on('click', function(event){
 	modal.toggle();
@@ -210,7 +215,7 @@ var playerWinsModal = function playerWinsModal(){
 }
 var playerLoseModal = function playerLoseModal(){
 	var modal = $('#player-lose-modal');
-	var closeButton = $('#close-player-lose-modal')	
+	var closeButton = $('#new-hand-player-lose-modal')	
 
 	modal.toggle();
 	closeButton.on('click', function(event){
