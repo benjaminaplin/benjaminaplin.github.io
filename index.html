@@ -7,7 +7,7 @@
     <script src="https://code.jquery.com/jquery-2.1.1.js"></script>
 </head>
 <body>
-  <button id="start-game">Start Game</button>
+  <button id="deal">Deal</button>
 
   <h1>Dealer Hand</h1>	
   <h2>Score <span id="dealer-score"></span></h2>	
@@ -19,6 +19,34 @@
   <div id="player-choices"></div>
  
   <h2 id="status"></h2>
+
+    <div id="player-wins-modal">
+     <div class="player-wins-modal-content">
+      <div class="player-wins-modal-header">
+        <h3>YOU WIN</h3>
+        <button id="new-hand-player-wins-modal">New Hand</button>
+        <button id="new-game-player-wins-modal">New Game</button>
+      </div>
+      <div class="player-wins-modal-body">
+<!--         <img id="player-wins-modal-image"src="http://memecrunch.com/meme/T3WQ/you-win-you-always-do/image.png"> -->
+      </div>
+     </div>
+    </div>
+    
+    <div id="player-lose-modal">
+     <div class="player-lose-modal-content">
+      <div class="player-lose-modal-header">
+        <h3>YOU LOSE</h3>
+        <button id="new-hand-player-lose-modal">New Hand</button>
+        <button id="new-game-player-wins-modal">New Game</button>
+      </div>
+      <div class="player-lose-modal-body">
+<!--         <img id="player-lose-modal-image"src="http://treasure.diylol.com/uploads/post/image/606973/resized_jesus-says-meme-generator-jesus-says-you-lose-bitch-8ccbb6.jpg"> -->
+      </div>    
+     </div>
+    </div>
+
+
 </body>
   <script src="./main.js"></script>
 </html>

@@ -1,5 +1,5 @@
 // $(function(){
-
+console.log("linksters");
 var cardType =  [2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,"A","A","A","A","J","J","J","J","K","K","K","K","Q","Q","Q","Q"];
 var cardValue = [2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,1,1,1,1,10,10,10,10,10,10,10,10,10,10,10,10];
 var cardImages = [
@@ -72,7 +72,7 @@ $.each(cardType, function(i, value, array){
 	arrayDeckOfCards.push(card);
 });
 //**************************
-$('#start-game').on("click", function(){
+$('#deal').on("click", function(){
 	arrayDeckOfCards = shuffle(arrayDeckOfCards);
 	deal();
 	player.checksValueOfHand();
@@ -139,18 +139,20 @@ var player = {
 	nextMove : function(){
 		if (playerCardsValue < 21 ){
 			//get options
-		} else if (playerCardsValue > 21){
+		}
+		if (playerCardsValue > 21){
 			$('#status').text("you bust, sucka!");
+			player.lose();
 		}
 	},
-	
-	//run dealer choice method
-	//if hit, 
-		//run hit function, 
-		//run check value, if 21, notify of 21
-		//else if bust, notify of bust, game over
-		//else run userChoice function again
-	bets : function(){}
+	bets : function(){},
+	wins : function(){
+		console.log("plaeyer winss!!!!")
+		playerWinsModal();
+	},
+	lose : function(){
+		playerLoseModal();
+	}
 	//bet method takes from player value and puts on table
 }
 player.firstMove();
@@ -173,29 +175,48 @@ var dealer = {
 		$('div#dealer-hand').append('<div class="card"><img src="assets/card_images/' + newDealerCard.cardImage + ' "class="card"></div>')
 	},
 	choice : function (){
-		// this.checksValueOfHand();
 		console.log(dealerCardsValue);
-
-		if(dealerCardsValue < 17){
-			this.dealToDealer();
-			this.checksValueOfHand();
-		} else if (dealerCardsValue > 17){
-			console.log("dealers ovrer 17");
-			$('#status').text("dealer stands, sucka!");
-		} else if (dealerCardsValue === 21){
-			console.log("dealers  21");
-			$('#status').text("dealer got a natch, sucka!");
-		}
-	}
+		// for (var i = 0; i < 3; i++) {
+			// console.log(i);
+			if(dealerCardsValue <= 17){
+				this.dealToDealer();
+				this.checksValueOfHand();
+				console.log("<=17 dealer takes a card");
+			}
+			if (dealerCardsValue > 17 && dealerCardsValue < 21){
+				console.log("dealers ovrer 17 and under 21");
+				$('#status').text("dealer stands");
+			}
+			if (dealerCardsValue > 21){
+				console.log("dealer busters");
+				$('#status').text("dealer BUSTS");
+				player.wins();
+			}
+			if (dealerCardsValue === 21){
+				console.log("dealers  21");
+				$('#status').text("dealer got a natch, sucka!");
+			}
+	 // }
+   }
 }
 
+var playerWinsModal = function playerWinsModal(){
+	var modal = $('#player-wins-modal');
+	var closeButton = $('#close-player-wins-modal')	
+	modal.toggle();
+	closeButton.on('click', function(event){
+	modal.toggle();
+	})
+}
+var playerLoseModal = function playerLoseModal(){
+	var modal = $('#player-lose-modal');
+	var closeButton = $('#close-player-lose-modal')	
 
-//GET WINNER FUNCTION
-//if tie - end game notify player else
-	//if playerObj.getScore > dealerObj.getScore
-	//	run playerWins function
-	//if dealerObj.getScore > playerObj.getScore
-	// 	run dealerWins functio
+	modal.toggle();
+	closeButton.on('click', function(event){
+	modal.toggle();
+})
+}
 
 //PLAYERWINS FUNCTION
 //notification, visuals of player win

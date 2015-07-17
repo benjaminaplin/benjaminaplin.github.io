@@ -27,3 +27,104 @@ body {
 	display: inline-block;
 	margin: 0 2.5px 0 2.5px;
 }
+
+/*******PLAYER WINS MODAL*********/
+#player-wins-modal-button{
+	height: 75px;
+	width: auto;
+	position: relative;
+	left: 100px;
+	top: 100px;
+	background:red;
+}
+
+#player-wins-modal{
+	position: fixed;
+	top: 0;
+	left: 0;
+	display: none;
+	width:100%;
+	height:100%;
+	background-color: rgba(0,0,0,0.5);
+}
+
+img#player-wins-modal-image {
+	width: 100%;
+	margin: 3px;
+}
+
+.player-wins-modal-content {
+	position: relative;
+	margin: 0 30%;
+	background-color: white;
+	top: 100px;
+	width: 40%;
+}
+
+.player-wins-modal-header {
+	position: absolute;
+	background-color: white;
+	width: 100%;
+}
+
+.player-wins-modal-body {
+	position: absolute;
+	width: 100%;
+	top: 50px;
+	background-color: white;
+	border-top: 2px rebeccapurple;
+}
+/*********END-PLAYER-WINS-MODAL*********/
+/*******PLAYER LOSE MODAL*********/
+#player-lose-modal-button{
+	height: 75px;
+	width: auto;
+	position: relative;
+	left: 100px;
+	top: 100px;
+	background:red;
+}
+
+#player-lose-modal{
+	position: fixed;
+	top: 0;
+	left: 0;
+	display: none;
+	width:100%;
+	height:100%;
+	background-color: rgba(0,0,0,0.5);
+
+}
+
+img#player-lose-modal-image {
+	width: 100%;
+	margin: 3px;
+}
+
+h3{
+	display: inline-block;
+	margin: 5px;
+}
+
+.player-lose-modal-content {
+	position: relative;
+	margin: 0 30%;
+	background-color: white;
+	top: 100px;
+	width: 40%;
+}
+
+.player-lose-modal-header {
+	position: absolute;
+	background-color: white;
+	width: 100%;
+}
+
+.player-lose-modal-body {
+	position: absolute;
+	width: 100%;
+	top: 50px;
+	background-color: white;
+	border-top: 2px rebeccapurple;
+}
+/*********END-PLAYER-LOSE-MODAL*********/
