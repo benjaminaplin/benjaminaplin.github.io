@@ -57,6 +57,8 @@ var cardImages = [
 var dealerCardsValue = 0;
 var playerCardsValue = 0;
 var arrayDeckOfCards = [];
+var modal = $('#modal');
+var newHandButton = $('#new-hand-modal')
 
 //*****CARD CREATOR*********
 var Card = function Card(cardType, cardValue, cardImage, cardId){
@@ -101,11 +103,11 @@ var deal = function deal(){
 };
 
 var newHand = function newHand() {
-	player.arrayPlayerHand = [];
+	player.playerHand = [];
 	$('div#player-hand').empty();
 	playerCardsValue = 0;
 
-	dealer.arrayDealerHand = [];
+	dealer.dealerHand = [];
 	$('div#dealer-hand').empty();
 	dealerCardsValue = 0;
 
@@ -124,7 +126,7 @@ var newGame = function newGame(){
 		arrayDeckOfCards.push(card);
 	});
 	arrayDeckOfCards = shuffle(arrayDeckOfCards);
-	modalToggle();
+	modal.toggle();
 	newHand();
 }
 
@@ -135,32 +137,50 @@ $('#new-game-modal').on("click", function(event){
 
 var player = {
 	dollars : 1000,
-	arrayPlayerHand : [],
+	playerHand : [],
 	checksValueOfHand : function(){
 		playerCardsValue = 0;
-		$.each(this.arrayPlayerHand, function(i, playerCard, array){
+		$.each(this.playerHand, function(i, playerCard, array){
 			playerCardsValue += playerCard.cardValue;
 			});
 		$('#player-score').text(playerCardsValue);
 	},
 	move : function(){
-		if (playerCardsValue < 21 && playerCardsValue > 0){
-			$('#status').text("hit or stand??");	
-		}
 		if (playerCardsValue > 21){
-			//if there is an ace in the hand, change its value to 1
-			$('#modal-status').text("you bust, sucka!");
-			player.lose();
-		}
-		if (playerCardsValue === 21){
+			//accounts for ace rule: if player over 21, aces are worth 1 rather than 11
+			console.log("player score over 21");
+			$.each(this.playerHand, function(i, playerCard, array){
+				console.log("player looking through cards for an ace");
+				if(playerCard.cardType === "A"){
+					console.log("player found Ace, subtracting 10");
+					playerCardsValue -= 10;
+					$('#player-score').text(playerCardsValue);
+				}
+			});
+			if (playerCardsValue > 21){
+				$('#modal-status').text("you bust, sucka!");
+				this.lose();
+			}
+		} else if (playerCardsValue < 21 && playerCardsValue > 0){
+			$('#status').text("hit or stand??");	
+		} else if (dealerCardsValue > 17 && (playerCardsValue > dealerCardsValue)){
+			modal.toggle();
+			$('#modal-status').text("dealer stands you win!")
+		} else if (playerCardsValue === 21){
 			$('#status').text("you got 21!");
+			//if plyaer is 21 and dealer is over 17: player wins, dealer stands
+			if (dealerCardsValue > 17){
+				this.wins();
+			}
 		}
+	  
 	},
 	dealToPlayer : function(){
 		var newPlayerCard = arrayDeckOfCards.pop();
-		this.arrayPlayerHand.push(newPlayerCard);
+		this.playerHand.push(newPlayerCard);
 		$('div#player-hand').append('<div class="card"><img src="assets/card_images/' + newPlayerCard.cardImage + ' "class="card"></div>');		
 		$('#cards-left-in-deck').text(arrayDeckOfCards.length + " cards left in the deck!");	
+		player.move();
 	},
 	choice : function(){
 		$('#player-choices').append('<button id="hit">hit</button><button id="stand">stand</button>');
@@ -170,67 +190,81 @@ var player = {
 			player.move();	
 		})
 		$('#stand').on("click", function(event){
-			dealer.choice();
+			dealer.move();
 		})
 		$('#status').text("hit or stand??");			
 	},
 	bets : function(){},
 	wins : function(){
-		modalToggle();
+		modal.toggle();
+		$('#modal-status').text("YOU WIN");
 	},
 	lose : function(){
-		modalToggle();
+		modal.toggle();
+		$('#modal-status').text("YOU LOSE DIRTY BITCH");
 	}
-	//bet method takes from player value and puts on table
 }
 
-player.move();
+
 
 //DEALER OBJECT
 var dealer = {
-	arrayDealerHand : [],
+	dealerHand : [],
 	checksValueOfHand : function(){
 		dealerCardsValue = 0;		
-		$.each(dealer.arrayDealerHand, function(i, playerCard, array){
+		$.each(dealer.dealerHand, function(i, playerCard, array){
 			dealerCardsValue = dealerCardsValue + playerCard.cardValue;
 		});
 		$('#dealer-score').text(dealerCardsValue);
 	},
 	dealToDealer : function (){
 		var newDealerCard = arrayDeckOfCards.pop();
-		this.arrayDealerHand.push(newDealerCard);
+		this.dealerHand.push(newDealerCard);
 		$('div#dealer-hand').append('<div class="card"><img src="assets/card_images/' + newDealerCard.cardImage + ' "class="card"></div>')
 		$('#cards-left-in-deck').text(arrayDeckOfCards.length + " cards left in the deck!");
 	},
-	choice : function (){
-		if(dealerCardsValue <= 17){
+	move : function (){
+		console.log("dealer choice fired");
+		console.log(dealerCardsValue);
+		if (dealerCardsValue === 21){
+			$('#status').text("dealer got 21, sucka! what's your move?");
+		} else if (dealerCardsValue > 17 && dealerCardsValue < 21){
+			$('#status').text("dealer stands, hit again?");
+			player.move();
+		} else if(dealerCardsValue <= 17){
+			// debugger
 			this.dealToDealer();
 			this.checksValueOfHand();
 		}
-		if (dealerCardsValue > 17 && dealerCardsValue < 21){
-			$('#status').text("dealer stands, hit again?");
+		if (dealerCardsValue > 21){
+			console.log("dealer score over 21");
+			$.each(dealer.dealerHand, function(i, dealerCard, array){
+				console.log("dealer looking through cards for an ace");
+				if(dealerCard.cardType === "A"){
+					console.log("dealer found Ace, subtracting 10");
+					dealerCardsValue -= 10;
+					$('#dealer-score').text(dealerCardsValue);
+				}
+			});
 		}
 		if (dealerCardsValue > 21){
-			$('h3#modal-status').text("dealer BUSTS. YOU WIN");
+			$('#modal-status').text("dealer bust$$$$!");
 			player.wins();
 		}
-		if (dealerCardsValue === 21){
-			$('#status').text("dealer got 21, sucka! what's your move?");
-		}
-    }
-}
-
-var modal = $('#modal');
-var newHandButton = $('#new-hand-modal')	
-
-var modalToggle = function modalToggle(){
-	modal.toggle();
+  }
 }
 
 newHandButton.on('click', function(event){
     modal.toggle();
     newHand();
 })
+
+var checkForTie = function checkForTie(){
+	if(playerCardsValue === 21 && dealerCardsValue === 21){
+		modal.toggle();
+		$('#modal-status').text("its a TIE");
+	}
+}
 
 
 
