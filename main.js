@@ -61,7 +61,7 @@ var arrayDeckOfCards = [];
 var modal = $('#modal');
 var newHandButton = $('#new-hand-modal');
 var cardBackToggleSet = 0;
-var playerDollars = 1000;
+var bet;
 
 //*****CARD CREATOR*********
 var Card = function Card(cardType, cardValue, cardImage, cardId){
@@ -105,6 +105,8 @@ var deal = function deal(){
 	player.dealToPlayer();
 	dealer.dealToDealer();
 	cardBackToggleSet = 0;
+	$( "#deal" ).off("click");
+	$("#account-balance").text("$" + player.dollars);
 };
 
 var newHand = function newHand() {
@@ -123,11 +125,11 @@ var newHand = function newHand() {
 	player.checksValueOfHand();
 	dealer.checksValueOfHand();
 	$("#dealer-score").toggle();
-	playerDollars = 1000;
-	$('#account-balance').text(playerDollars);
 }
 
 var newGame = function newGame(){
+	player.dollars = 1000;
+	bet = 0;
 	arrayDeckOfCards = [];
 	$.each(cardType, function(i, value, array){
 		var card = new Card(cardType[i], cardValue[i], cardImages[i], i);
@@ -164,6 +166,7 @@ var player = {
 			});
 			if (playerCardsValue > 21){
 				$('#modal-status').text("you bust, sucka!");
+				cardBackToggle();
 				this.lose();
 			}
 		} else if (playerCardsValue < 21 && playerCardsValue > 0){
@@ -171,6 +174,7 @@ var player = {
 		} else if (dealerCardsValue > 17 && (playerCardsValue > dealerCardsValue)){
 			modal.toggle();
 			$('#modal-status').text("dealer stands you win!")
+			this.wins();
 		} else if (playerCardsValue === 21){
 			$('#status').text("you got 21!");
 			//if plyaer is 21 and dealer is over 17: player wins, dealer stands
@@ -192,25 +196,25 @@ var player = {
 			player.dealToPlayer();
 			player.checksValueOfHand();
 			player.move();	
-		})
+		});
 		$('#stand').on("click", function(event){
-			while(cardBackToggleSet===0){
-				$("#card-back").toggle();
-				$('#dealer-score').toggle();
-				cardBackToggleSet++;
-			}
+			cardBackToggle();
 			dealer.move();
-		})
+		});
 		$('#status').text("hit or stand??");			
 	},
 	bets : function(){},
 	wins : function(){
 		modal.toggle();
-		$('#modal-status').text("YOU WIN");
+		$('#modal-status').text("YOU WIN $" + bet + " now run away!!");
+		this.dollars += bet;
+		console.log("just added bet of " + bet + " to balance whch is now " + player.dollars);
+		resetBet();
 	},
 	lose : function(){
 		modal.toggle();
-		$('#modal-status').text("YOU LOSE DICK BAG");
+		$('#modal-status').text("YOU just lost $" + bet + " dumb shit");
+		resetBet();
 	}
 }
 
@@ -267,10 +271,32 @@ var checkForTie = function checkForTie(){
 	if(playerCardsValue === 21 && dealerCardsValue === 21){
 		modal.toggle();
 		$('#modal-status').text("its a TIE");
+		player.dollars += bet;
 	}
 }
+// *************BETTING****************
+$("#place-bet").on("click", function(e){
+   	bet = $('input#current-bet-input').val();	
+	bet = parseInt(bet);
+	$('h3#current-bet').text("$" + bet);
+	player.dollars -= bet;
+	$("#account-balance").text("$" + player.dollars);
+	$("#current-bet-input").val('');
 
 
+});
 
+var resetBet = function resetBet() {
+	bet = 0;
+	$("#current-bet").text(bet);
+	$("#current-bet-input").val('');
+}
+// *************END-BETTING****************
 
-
+var cardBackToggle = function cardBackToggle(){
+	while(cardBackToggleSet===0){
+		$("#card-back").toggle();
+		$('#dealer-score').toggle();
+		cardBackToggleSet++;
+	}
+}
