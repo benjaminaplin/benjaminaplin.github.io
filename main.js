@@ -73,21 +73,19 @@ $.each(cardType, function(i, value, array){
 $('#deal').on("click", function(){
 	arrayDeckOfCards = shuffle(arrayDeckOfCards);
 	deal();
-	player.checksValueOfHand();//*******************************<<<<<<<<<<
+	player.checksValueOfHand();
 	dealer.checksValueOfHand();
-	player.choice();//*******************************<<<<<<<<<<PROBLEM HERE IS WHERE CHECKSVALUE OF HAND GETS TRICKY
+	player.choice();
 }); 
 
 function shuffle(array) {
   var currentIndex = array.length;
   var temporaryValue;
   var randomIndex;
-    // While there remain elements to shuffle...
+
   while (0 !== currentIndex) {
-      // Pick a remaining element...
   randomIndex = Math.floor(Math.random() * currentIndex);
   currentIndex -= 1;
-      // And swap it with the current element.
   temporaryValue = array[currentIndex];
   array[currentIndex] = array[randomIndex];
   array[randomIndex] = temporaryValue;
@@ -111,14 +109,26 @@ var newHand = function newHand() {
 	$('div#dealer-hand').empty();
 	dealerCardsValue = 0;
 
+	$('#status').text("");
+	$('#cards-left-in-deck').text(arrayDeckOfCards.length + " cards left in the deck!");
+
 	deal();
-	
 	player.checksValueOfHand();
 	dealer.checksValueOfHand();
-	// debugger
 }
 
+var newGame = function newGame(){
+	$.each(cardType, function(i, value, array){
+		var card = new Card(cardType[i], cardValue[i], cardImages[i], i);
+		arrayDeckOfCards.push(card);
+	});
+	newHand();
+}
 
+$('#new-game-modal').on("click", function(event){
+	console.log("new game clicked")
+	newGame();
+})
 
 var player = {
 	dollars : 1000,
@@ -130,24 +140,19 @@ var player = {
 			});
 		$('#player-score').text(playerCardsValue);
 	},
-	firstMove : function(){
-		if (playerCardsValue === 21){
-			$('#status').text("you got 21!");
-		}
-		if (playerCardsValue > 0 && playerCardsValue < 21){
-			this.choice();
-			$('#status').text("hit or stand??");			
-		}
-	},
-	nextMove : function(){
-		if (playerCardsValue < 21 ){
-			$('#status').text("hit or stand??");		
+	move : function(){
+		console.log("move fucntion fired")
+		if (playerCardsValue < 21 && playerCardsValue > 0){
+			console.log("move hit or stand")
+			$('#status').text("hit or stand??");	
 		}
 		if (playerCardsValue > 21){
-			$('#status').text("you bust, sucka!");
+			console.log("move you bust")
+			$('#modal-status').text("you bust, sucka!");
 			player.lose();
 		}
 		if (playerCardsValue === 21){
+			console.log("move you got 21")
 			$('#status').text("you got 21!");
 		}
 	},
@@ -155,30 +160,35 @@ var player = {
 		var newPlayerCard = arrayDeckOfCards.pop();
 		this.arrayPlayerHand.push(newPlayerCard);
 		$('div#player-hand').append('<div class="card"><img src="assets/card_images/' + newPlayerCard.cardImage + ' "class="card"></div>');		
+		$('#cards-left-in-deck').text(arrayDeckOfCards.length + " cards left in the deck!");	
 	},
 	choice : function(){
 		$('#player-choices').append('<button id="hit">hit</button><button id="stand">stand</button>');
 		$('#hit').on("click", function(event){
 			player.dealToPlayer();
-			player.checksValueOfHand();//*******************************<<<<<<<<<<
-			player.nextMove();	
+			player.checksValueOfHand();
+			player.move();	
 		})
 		$('#stand').on("click", function(event){
 			dealer.choice();
 		})
 		$('#status').text("hit or stand??");			
 	},
+	checkWinner : function(){
+		
+	},
 	bets : function(){},
 	wins : function(){
 		console.log("player wins function fired")
-		playerWinsModalDiv();
+		modalDiv();
 	},
 	lose : function(){
-		playerLoseModalDiv();
+		modalDiv();
 	}
 	//bet method takes from player value and puts on table
 }
-player.firstMove();
+
+player.move();
 
 //DEALER OBJECT
 var dealer = {
@@ -194,12 +204,12 @@ var dealer = {
 		var newDealerCard = arrayDeckOfCards.pop();
 		this.arrayDealerHand.push(newDealerCard);
 		$('div#dealer-hand').append('<div class="card"><img src="assets/card_images/' + newDealerCard.cardImage + ' "class="card"></div>')
+		$('#cards-left-in-deck').text(arrayDeckOfCards.length + " cards left in the deck!");
 	},
 	choice : function (){
 		if(dealerCardsValue <= 17){
 			this.dealToDealer();
 			this.checksValueOfHand();
-			console.log("<=17 dealer takes a card");
 		}
 		if (dealerCardsValue > 17 && dealerCardsValue < 21){
 			console.log("dealers ovrer 17 and under 21");
@@ -207,37 +217,26 @@ var dealer = {
 		}
 		if (dealerCardsValue > 21){
 			console.log("dealer busters");
-			$('#status').text("dealer BUSTS");
+			$('h3#modal-status').text("dealer BUSTS. YOU WIN");
 			player.wins();
 		}
 		if (dealerCardsValue === 21){
 			console.log("dealers  21");
-			$('#status').text("dealer got a natch, sucka!");
+			$('#status').text("dealer got 21, sucka! what's your move?");
 		}
     }
 }
 
-var playerWinsModalDiv = function playerWinsModalDiv(){
-	playerWinsModal.toggle();
+var modal = $('#modal');
+var newHandButton = $('#new-hand-modal')	
+
+var modalDiv = function modalDiv(){
+	console.log("modaldiv fired")
+	modal.toggle();
 }
 
-var playerWinsModal = $('#player-wins-modal');
-var newHandButton = $('#new-hand-player-wins-modal')	
 newHandButton.on('click', function(event){
-	console.log("clicked new hand button");
-	playerWinsModal.toggle();
-	newHand();
-})
-
-var playerLoseModalDiv = function playerLoseModalDiv(){
-	playerLoseModal.toggle();
-}
-
-var playerLoseModal = $('#player-lose-modal');
-var newHandButton = $('#new-hand-player-lose-modal')	
-newHandButton.on('click', function(event){
-		// debugger
-    playerLoseModal.toggle();
+    modal.toggle();
     newHand();
 })
 
