@@ -21,18 +21,28 @@
   <h2 id="status"></h2>
   <h2 id="cards-left-in-deck"></h2>
 
-    <div id="modal">
-     <div class="modal-content">
-      <div class="modal-header">
-        <h3 id="modal-status"></h3>
-        <button id="new-hand-modal">New Hand</button>
-        <button id="new-game-modal">New Game</button>
-      </div>
-      <div class="modal-body">
-      </div>
-     </div>
+  <div id="modal">
+    <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="modal-status"></h3>
+      <button id="new-hand-modal">New Hand</button>
+      <button id="new-game-modal">New Game</button>
     </div>
-    
+    <div class="modal-body">
+    </div>
+    </div>
+  </div>
+  <div class="account" id="current-bet">
+    <h2>Current Bet</h2>
+    <div class="balance" id="current-bet_balance">$0</div>
+     <input id="current-betamount" type="text" placeholder="enter an amount" />
+     <input id="current-betdeposit" type="button" value="place a bet and transform your life!!" />
+  </div>
+  <div class="account" id="account-balance">
+    <h2>Account Balance</h2>
+    <div class="balance" id="account-balance">$0</div>
+
+  </div>
 </body>
   <script src="./main.js"></script>
 </html>

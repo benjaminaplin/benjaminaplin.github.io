@@ -1,10 +1,16 @@
 h1{
    font-family: helvetica;
+   font-size: 20px;
+}
+
+h2 {
+   font-family: helvetica;
+   font-size: 15px;
 }
 
 body {
 	font-family: helvetica;
-	background: #60AB67;
+	background: #B6C9C1;
 }
 
 h2#status {
@@ -31,6 +37,19 @@ h2#status {
 	display: inline-block;
 	margin: 0 2.5px 0 2.5px;
 }
+
+img#card-back {
+  position: absolute;
+  height: 99px;
+  width: 72px;
+  margin-left: 5px;
+  display: inline-block;
+}
+
+#dealer-score {
+	display: none;
+}
+
 
 /*******MODAL*********/
 h3{
