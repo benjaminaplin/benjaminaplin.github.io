@@ -1,5 +1,5 @@
 var cardType =  [2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,"A","A","A","A","J","J","J","J","K","K","K","K","Q","Q","Q","Q"];
-var cardValue = [2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,1,1,1,1,10,10,10,10,10,10,10,10,10,10,10,10];
+var cardValue = [2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,10,10,10,10,10,10,10,10,10,10,10,10];
 var cardImages = [
 	"2_of_clubs.png",
 	"2_of_diamonds.png",
@@ -118,10 +118,13 @@ var newHand = function newHand() {
 }
 
 var newGame = function newGame(){
+	arrayDeckOfCards = [];
 	$.each(cardType, function(i, value, array){
 		var card = new Card(cardType[i], cardValue[i], cardImages[i], i);
 		arrayDeckOfCards.push(card);
 	});
+	arrayDeckOfCards = shuffle(arrayDeckOfCards);
+	modalToggle();
 	newHand();
 }
 
@@ -141,18 +144,15 @@ var player = {
 		$('#player-score').text(playerCardsValue);
 	},
 	move : function(){
-		console.log("move fucntion fired")
 		if (playerCardsValue < 21 && playerCardsValue > 0){
-			console.log("move hit or stand")
 			$('#status').text("hit or stand??");	
 		}
 		if (playerCardsValue > 21){
-			console.log("move you bust")
+			//if there is an ace in the hand, change its value to 1
 			$('#modal-status').text("you bust, sucka!");
 			player.lose();
 		}
 		if (playerCardsValue === 21){
-			console.log("move you got 21")
 			$('#status').text("you got 21!");
 		}
 	},
@@ -174,16 +174,12 @@ var player = {
 		})
 		$('#status').text("hit or stand??");			
 	},
-	checkWinner : function(){
-		
-	},
 	bets : function(){},
 	wins : function(){
-		console.log("player wins function fired")
-		modalDiv();
+		modalToggle();
 	},
 	lose : function(){
-		modalDiv();
+		modalToggle();
 	}
 	//bet method takes from player value and puts on table
 }
@@ -212,16 +208,13 @@ var dealer = {
 			this.checksValueOfHand();
 		}
 		if (dealerCardsValue > 17 && dealerCardsValue < 21){
-			console.log("dealers ovrer 17 and under 21");
 			$('#status').text("dealer stands, hit again?");
 		}
 		if (dealerCardsValue > 21){
-			console.log("dealer busters");
 			$('h3#modal-status').text("dealer BUSTS. YOU WIN");
 			player.wins();
 		}
 		if (dealerCardsValue === 21){
-			console.log("dealers  21");
 			$('#status').text("dealer got 21, sucka! what's your move?");
 		}
     }
@@ -230,8 +223,7 @@ var dealer = {
 var modal = $('#modal');
 var newHandButton = $('#new-hand-modal')	
 
-var modalDiv = function modalDiv(){
-	console.log("modaldiv fired")
+var modalToggle = function modalToggle(){
 	modal.toggle();
 }
 
