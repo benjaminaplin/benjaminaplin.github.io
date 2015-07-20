@@ -1,7 +1,7 @@
 
 body {
 	font-family: helvetica;
-	background: #DCDCDC;
+	background: #c0c0c0;
 	font-size: 5em;
 }
 
@@ -10,9 +10,18 @@ h1{
    font-size: 16px;
 }
 
-h2 {
-	font-size: .55em;
-	padding: 3px 1px 3px 1px;
+#container h1{
+  color: white;
+  font-size: 0.55em;
+  margin-left: 7px;
+}
+
+
+
+#container h2 {
+  font-size: .45em;
+  padding: 5px;
+  margin: 55px 0 0 0;
 }
 
 p {
@@ -21,15 +30,15 @@ p {
 }
 
 
-h2#status {
+h2#dealer-score {
 	position: relative;
 }
 
 aside {
   float: right;
-  width: 37%;
-  padding: 5px;
-  margin: 5px 5px 5px 15px;
+  width: 30%;
+  padding: 5px 10px 5px 5px;
+  margin: 5px 0px 5px 15px;
   position: relative;
   right: 66px;
   top: 43px;
@@ -38,8 +47,29 @@ aside {
   height: 567px;
 }
 
+aside h2 {
+	font-size: .55em;
+	padding: 3px 1px 3px 1px;
+}
 
+#player-choices {
+	height: 60px;
+}
 
+#player-choices button {
+  border: 1px solid #FFFFFF;
+  margin-left: 5px;
+  display: inline-block;
+  position: relative;
+  top: -35px;
+	
+}
+
+#place-bet {
+  border: 1px solid #FFFFFF;
+  width: 87%;
+  margin-left: 2px;
+}
 
 .balance {
 	text-align: center;
@@ -52,7 +82,7 @@ aside {
 
 #container {
   float: left;
-  width: 55%;
+  width: 60%;
   padding: 0 0px 5px 15px;
   margin: 0 0px 5px 15px;
 }
@@ -62,22 +92,29 @@ aside {
   display: block;
   border: 1px white solid;
   border-radius: 5px;
-  padding: 8px 0 8px 0;
+  padding: 8px;
   margin: 0 0 5px 5px;
   text-align: center;
-  max-width: 435px;
+  width: 75%;
+
 }
+
+#container h1{
+  color: white;
+  font-size: .45em;
+}
+
 #player-hand {
   height: 135px;
   display: block;
   border: 1px white solid;
   border-radius: 5px;
-  padding: 8px 0 8px 0;
+  padding: 8px;
   margin: 0 0 5px 5px;
   text-align: center;
-  max-width: 435px;
-
+  width: 75%;
 }
+
 .card {
 	height: 100%;
 	display: inline-block;

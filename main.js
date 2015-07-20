@@ -237,14 +237,14 @@ var player = {
 		setTimeout(function(){
 			modal.toggle();
 		}, 1800);
-		$('#modal-status').text("YOU got " + playerCardsValue + " & dealer got " + dealerCardsValue +  " YOU WIN $" + bet + "!!");
+		$('#modal-status').text("you: " + playerCardsValue + " dealer: " + dealerCardsValue +  " you win $" + bet + "!");
 		resetBet();
 	},
 	lose : function(){
 		setTimeout(function(){
 			modal.toggle();
 		}, 1800);
-		$('#modal-status').text("YOU got " + playerCardsValue + " & dealer got " + dealerCardsValue +  " YOU just lost $" + bet + "!!!");
+		$('#modal-status').text("you: " + playerCardsValue + " dealer: " + dealerCardsValue +  " you lose $" + bet + "!");
 		resetBet();
 	}
 }
