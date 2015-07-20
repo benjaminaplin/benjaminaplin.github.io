@@ -9,21 +9,21 @@
     <script src="https://code.jquery.com/jquery-2.1.1.js"></script>
 </head>
 <body>
-  <button id="deal">Deal</button>
+  <div id="container"> 
+    <button id="deal">Deal</button>
 
-  <h1>Dealer Hand</h1>	
-  <h2 id="dealer-score"></h2>	
-  <div id="dealer-hand"></div>
+    <h2 id="dealer-score"></h2> 
+    <div id="dealer-hand"></div>
+    <h1>Dealer Hand</h1>	
 
-  <h1>Player Hand</h1>	
-  <h2>Your Card Value is <span id="player-score"></span></h2>	
-  <div id="player-hand"></div>
-  <div id="player-choices">
-    <button id="clear">clear</button>
-  </div>
-  <h2 id="status"></h2>
-  <h2 id="cards-left-in-deck"></h2>
+    <h2>Your Card Value is <span id="player-score"></span></h2> 
+    <div id="player-hand"></div>
+    <h1>Player Hand</h1>	
+    <div id="player-choices">
+      <button id="clear">clear</button>
+    </div>
 
+  </div>  
   <div id="modal">
     <div class="modal-content">
     <div class="modal-body">
@@ -35,17 +35,20 @@
     </div>
     </div>
   </div>
-  <div class="account">
-    <h2>Current Bet</h2>
-    <div class="balance">
-      <h3 id="current-bet">$0</h3>
-      <input id="current-bet-input" type="text" placeholder="enter an amount" />
-      <input id="place-bet" type="button" value="place a bet and transform your life!!" />
-    </div>
-    <h2>Account Balance</h2>
-    <div class="balance" id="account-balance">$0</div>
-
-  </div>
+  <aside>
+    <div class="account">
+      <h2>Current Bet</h2>
+      <div class="balance">
+        <h3><p>$</p><p id="current-bet">0</p></h3>
+        <input id="current-bet-input" type="text" placeholder="enter an amount" />
+        <input id="place-bet" type="button" value="bet and transform your life!!" />
+      </div>
+      <h2>Account Balance</h2>
+      <div class="balance"><p id="account-balance"></p></div>
+      </div>
+      <h2 id="status"></h2>
+      <h2 id="cards-left-in-deck"></h2>
+   </aside> 
 </body>
   <script src="./main.js"></script>
 </html>

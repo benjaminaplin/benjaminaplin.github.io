@@ -113,7 +113,6 @@ var checkForTie = function checkForTie(){
 }
 
 var deal = function deal(){
-
 	setTimeout(function(){
 	$('div#dealer-hand').append('<div class="card"><img src="assets/card_images/card_back.png" id="card-back" class="card animated bounceInDown"></div>');
 		}, 200);	
@@ -313,10 +312,11 @@ $("#place-bet").on("click", function(e){
 	// debugger
    	bet = $('input#current-bet-input').val();	
 	bet = parseInt(bet);
-	$('h3#current-bet').text("$" + bet);
+	$('#current-bet').text(bet);
 	playerDollars -= bet;
 	$("#account-balance").text("$" + playerDollars);
 	$("#current-bet-input").val('$0');
+	$("#current-bet").addClass("flash");
 });
 
 var resetBet = function resetBet() {
