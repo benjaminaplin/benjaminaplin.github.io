@@ -61,7 +61,9 @@ var arrayDeckOfCards = [];
 var modal = $('#modal');
 var newHandButton = $('#new-hand-modal');
 var cardBackToggleSet = 0;
+var playerDollars = 1000;
 var bet;
+$("#account-balance").text("$" + playerDollars);
 
 //*****CARD CREATOR*********
 var Card = function Card(cardType, cardValue, cardImage, cardId){
@@ -98,15 +100,22 @@ function shuffle(array) {
   return array;
 }
 
+var checkForTie = function checkForTie(){
+	if(playerCardsValue === dealerCardsValue && dealerCardsValue > 17){
+		playerDollars += bet;
+		modal.toggle();
+		$('#modal-status').text("its a TIE");
+	} 
+}
+
 var deal = function deal(){
-	$('div#dealer-hand').append('<div class="card"><img src="assets/card_images/card_back.png" id="card-back" class="card"></div>')
+	$('div#dealer-hand').append('<div class="card"><img src="assets/card_images/card_back.png" id="card-back" class="card"></div>');
 	player.dealToPlayer();
 	dealer.dealToDealer();
 	player.dealToPlayer();
 	dealer.dealToDealer();
 	cardBackToggleSet = 0;
 	$( "#deal" ).off("click");
-	$("#account-balance").text("$" + player.dollars);
 };
 
 var newHand = function newHand() {
@@ -124,11 +133,10 @@ var newHand = function newHand() {
 	deal();
 	player.checksValueOfHand();
 	dealer.checksValueOfHand();
-	$("#dealer-score").toggle();
+	// $("#dealer-score").toggle();
 }
 
 var newGame = function newGame(){
-	player.dollars = 1000;
 	bet = 0;
 	arrayDeckOfCards = [];
 	$.each(cardType, function(i, value, array){
@@ -145,7 +153,6 @@ $('#new-game-modal').on("click", function(event){
 })
 
 var player = {
-	dollars : 1000,
 	playerHand : [],
 	checksValueOfHand : function(){
 		playerCardsValue = 0;
@@ -155,6 +162,7 @@ var player = {
 		$('#player-score').text(playerCardsValue);
 	},
 	move : function(){
+		// debugger
 		checkForTie();
 		if (playerCardsValue > 21){
 			//accounts for ace rule: if player over 21, aces are worth 1 rather than 11
@@ -163,6 +171,7 @@ var player = {
 					playerCardsValue -= 10;
 					$('#player-score').text(playerCardsValue);
 				}
+				// if(playerCardsValue === )
 			});
 			if (playerCardsValue > 21){
 				$('#modal-status').text("you bust, sucka!");
@@ -172,16 +181,17 @@ var player = {
 		} else if (playerCardsValue < 21 && playerCardsValue > 0){
 			$('#status').text("hit or stand??");	
 		} 
-		if (dealerCardsValue > 17 && (playerCardsValue > dealerCardsValue)){
-			modal.toggle();
-			this.wins();
+		if (dealerCardsValue > 17 && playerCardsValue > dealerCardsValue && playerCardsValue <= 21){
+			// modal.toggle();
+			player.wins();
 		} else if (playerCardsValue === 21){
 			$('#status').text("you got 21!");
-			//if plyaer is 21 and dealer is over 17: player wins, dealer stands
+			//if player is 21 and dealer is over 17: player wins, dealer stands
 			if (dealerCardsValue > 17){
-				this.wins();
+				player.wins();
 			}
 		}
+		checkForTie();
 	},
 	dealToPlayer : function(){
 		var newPlayerCard = arrayDeckOfCards.pop();
@@ -205,11 +215,10 @@ var player = {
 	},
 	bets : function(){},
 	wins : function(){
+		playerDollars += bet*2;
+		$("#account-balance").text("$" + playerDollars);
 		modal.toggle();
 		$('#modal-status').text("YOU WIN $" + bet + "!!");
-		player.dollars = player.dollars + bet;
-		console.log("just added bet of " + bet + " to balance whch is now " + player.dollars);
-		$("#account-balance").text("$" + player.dollars);
 		resetBet();
 	},
 	lose : function(){
@@ -235,21 +244,21 @@ var dealer = {
 		$('#cards-left-in-deck').text(arrayDeckOfCards.length + " cards left in the deck!");
 	},
 	move : function (){
-		if (dealerCardsValue === 21){
-			$('#status').text("dealer got 21, sucka! what's your move?");
-		} else if (dealerCardsValue > 17 && dealerCardsValue < 21){
-			$('#status').text("dealer stands, hit again?");
-			player.move();
+		// debugger
+		if (dealerCardsValue === 21 && playerCardsValue !== 21){
+			$('#status').text("dealer got 21, sucka!");
+			player.lose();
 		} else if(dealerCardsValue <= 17){
-			this.dealToDealer();
-			this.checksValueOfHand();
+			while(dealerCardsValue <= 17){
+				this.dealToDealer();
+				this.checksValueOfHand();		
+			}
 		}
-		if (dealerCardsValue > 21){
-			console.log("dealer score over 21");
+		if(dealerCardsValue > playerCardsValue){
+			player.lose();
+		} else if (dealerCardsValue > 21){
 			$.each(dealer.dealerHand, function(i, dealerCard, array){
-				console.log("dealer looking through cards for an ace");
 				if(dealerCard.cardType === "A"){
-					console.log("dealer found Ace, subtracting 10");
 					dealerCardsValue -= 10;
 					$('#dealer-score').text(dealerCardsValue);
 				}
@@ -259,7 +268,14 @@ var dealer = {
 			$('#modal-status').text("dealer bust$$$$!");
 			player.wins();
 		}
+		if (dealerCardsValue > 17 && playerCardsValue > dealerCardsValue && playerCardsValue <= 21){
+			// modal.toggle();
+		player.wins();
+		}
 		checkForTie();
+		if(dealerCardsValue === 21 && playerCardsValue < 21){
+			this.wins();
+		}
   }
 }
 
@@ -268,23 +284,22 @@ newHandButton.on('click', function(event){
     newHand();
 })
 
-var checkForTie = function checkForTie(){
-	if(playerCardsValue === 21 && dealerCardsValue === 21){
-		modal.toggle();
-		$('#modal-status').text("its a TIE");
-		player.dollars += bet;
-	}
-}
+$('#clear').on("click", function(){
+	console.log("clear clicked");
+	playerDollars += bet;
+	$("#account-balance").text("$" + playerDollars);
+	newHand();
+	resetBet();
+})
 // *************BETTING****************
 $("#place-bet").on("click", function(e){
+	// debugger
    	bet = $('input#current-bet-input').val();	
 	bet = parseInt(bet);
 	$('h3#current-bet').text("$" + bet);
-	player.dollars -= bet;
-	$("#account-balance").text("$" + player.dollars);
-	$("#current-bet-input").val('');
-
-
+	playerDollars -= bet;
+	$("#account-balance").text("$" + playerDollars);
+	$("#current-bet-input").val('$0');
 });
 
 var resetBet = function resetBet() {
