@@ -82,10 +82,10 @@ $('#deal').on("click", function(){
 	deal();
 	setTimeout(function(){
 		dealer.checksValueOfHand();
-				}, 1750);
+				}, 1500);
 	setTimeout(function(){
 		player.checksValueOfHand();
-				}, 1750);
+				}, 1500);
 	player.choice();
 }); 
 
@@ -116,19 +116,19 @@ var deal = function deal(){
 
 	setTimeout(function(){
 	$('div#dealer-hand').append('<div class="card"><img src="assets/card_images/card_back.png" id="card-back" class="card animated bounceInDown"></div>');
-		}, 250);	
+		}, 200);	
 	setTimeout(function(){
 		dealer.dealToDealer();
-		}, 250);
+		}, 200);
 	setTimeout(function(){
 		player.dealToPlayer();
 		}, 500);
 	setTimeout(function(){
 		player.dealToPlayer();
-		}, 1500);
+		}, 1000);
 	setTimeout(function(){
 		dealer.dealToDealer();
-		}, 1000);
+		}, 750);
 	cardBackToggleSet = 0;
 	$( "#deal" ).off("click");
 	$("#dealer-score").toggle();
@@ -148,8 +148,12 @@ var newHand = function newHand() {
 
 	deal();
 
-	player.checksValueOfHand();
-	dealer.checksValueOfHand();
+	setTimeout(function(){
+		dealer.checksValueOfHand();
+				}, 1300);
+	setTimeout(function(){
+		player.checksValueOfHand();
+				}, 1300);
 }
 
 var newGame = function newGame(){
@@ -233,14 +237,14 @@ var player = {
 		$("#account-balance").text("$" + playerDollars);
 		setTimeout(function(){
 			modal.toggle();
-		}, 2000);
+		}, 1800);
 		$('#modal-status').text("YOU got " + playerCardsValue + " & dealer got " + dealerCardsValue +  " YOU WIN $" + bet + "!!");
 		resetBet();
 	},
 	lose : function(){
 		setTimeout(function(){
 			modal.toggle();
-		}, 2000);
+		}, 1800);
 		$('#modal-status').text("YOU got " + playerCardsValue + " & dealer got " + dealerCardsValue +  " YOU just lost $" + bet + "!!!");
 		resetBet();
 	}
