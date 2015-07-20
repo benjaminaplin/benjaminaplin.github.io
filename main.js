@@ -171,9 +171,9 @@ var player = {
 			}
 		} else if (playerCardsValue < 21 && playerCardsValue > 0){
 			$('#status').text("hit or stand??");	
-		} else if (dealerCardsValue > 17 && (playerCardsValue > dealerCardsValue)){
+		} 
+		if (dealerCardsValue > 17 && (playerCardsValue > dealerCardsValue)){
 			modal.toggle();
-			$('#modal-status').text("dealer stands you win!")
 			this.wins();
 		} else if (playerCardsValue === 21){
 			$('#status').text("you got 21!");
@@ -206,14 +206,15 @@ var player = {
 	bets : function(){},
 	wins : function(){
 		modal.toggle();
-		$('#modal-status').text("YOU WIN $" + bet + " now run away!!");
-		this.dollars += bet;
+		$('#modal-status').text("YOU WIN $" + bet + "!!");
+		player.dollars = player.dollars + bet;
 		console.log("just added bet of " + bet + " to balance whch is now " + player.dollars);
+		$("#account-balance").text("$" + player.dollars);
 		resetBet();
 	},
 	lose : function(){
 		modal.toggle();
-		$('#modal-status').text("YOU just lost $" + bet + " dumb shit");
+		$('#modal-status').text("YOU just lost $" + bet + "!!!");
 		resetBet();
 	}
 }
@@ -291,7 +292,7 @@ var resetBet = function resetBet() {
 	$("#current-bet").text(bet);
 	$("#current-bet-input").val('');
 }
-// *************END-BETTING****************
+// *************************************
 
 var cardBackToggle = function cardBackToggle(){
 	while(cardBackToggleSet===0){
