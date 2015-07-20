@@ -1,16 +1,16 @@
 h1{
    font-family: helvetica;
-   font-size: 20px;
+   font-size: 16px;
 }
 
 h2 {
    font-family: helvetica;
-   font-size: 15px;
+   font-size: 13px;
 }
 
 body {
 	font-family: helvetica;
-	background: #B6C9C1;
+	background: #DCDCDC;
 }
 
 h2#status {
@@ -20,26 +20,34 @@ h2#status {
 #dealer-hand {
 	height: 100px;
 	display: block;
-	border: 1px black solid;
+	border: 1px white solid;
+	border-radius: 5px;
 	padding: 5px;
 	margin: 5px;
+	text-align: center;
+	width: auto;
 }
 #player-hand {
 	height: 100px;
 	display: block;
-	border: 1px black solid;
+	border: 1px white solid;
+	border-radius: 5px;
 	padding: 5px;
 	margin: 5px;
+	text-align: center;	
+	min-width: 200px;
+
 }
 
 .card {
 	height: 100%;
 	display: inline-block;
-	margin: 0 2.5px 0 2.5px;
+	margin: auto 2.5px;
 }
 
 img#card-back {
   position: absolute;
+  z-index: 1;
   height: 99px;
   width: 72px;
   margin-left: 5px;

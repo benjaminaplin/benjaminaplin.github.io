@@ -3,18 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <title>BlackJack!</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/skeleton.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="https://code.jquery.com/jquery-2.1.1.js"></script>
 </head>
 <body>
   <button id="deal">Deal</button>
 
   <h1>Dealer Hand</h1>	
-  <h2>Score <span id="dealer-score"></span></h2>	
+  <h2 id="dealer-score"></h2>	
   <div id="dealer-hand"></div>
 
   <h1>Player Hand</h1>	
-  <h2>Score <span id="player-score"></span></h2>	
+  <h2>Your Card Value is <span id="player-score"></span></h2>	
   <div id="player-hand"></div>
   <div id="player-choices">
     <button id="clear">clear</button>
