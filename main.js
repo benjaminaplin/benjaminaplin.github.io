@@ -78,17 +78,20 @@ $.each(cardType, function(i, value, array){
 });
 //**************************
 $('#deal').on("click", function(){
-	
 	arrayDeckOfCards = shuffle(arrayDeckOfCards);
 	deal();
 	setTimeout(function(){
 		dealer.checksValueOfHand();
-				}, 1500);
+				}, 1250);
 	setTimeout(function(){
 		player.checksValueOfHand();
-				}, 1500);
-	player.move();
-	player.choice();
+				}, 1250);
+	setTimeout(function(){
+		player.move();
+				}, 1250);
+	setTimeout(function(){
+		player.choice();
+				}, 1250);
 }); 
 
 function shuffle(array) {
@@ -115,7 +118,6 @@ var checkForTie = function checkForTie(){
 }
 
 var deal = function deal(){
-	
 	setTimeout(function(){
 	$('div#dealer-hand').append('<div class="card"><img src="assets/card_images/card_back.png" id="card-back" class="card animated bounceInDown"></div>');
 		}, 200);	
@@ -131,12 +133,10 @@ var deal = function deal(){
 	setTimeout(function(){
 		dealer.dealToDealer();
 		}, 750);
-
 	cardBackToggleSet = 0;
 	$( "#deal" ).off("click");
 	$("#dealer-score").toggle();
 	$('#modal-header').text("");
-
 };
 
 var newHand = function newHand() {
@@ -152,13 +152,12 @@ var newHand = function newHand() {
 	$('#cards-left-in-deck').text(arrayDeckOfCards.length + " cards left in the deck!");
 
 	deal();
-
 	setTimeout(function(){
 		dealer.checksValueOfHand();
-				}, 1300);
+				}, 1200);
 	setTimeout(function(){
 		player.checksValueOfHand();
-				}, 1300);
+				}, 1200);
 }
 
 var newGame = function newGame(){
@@ -188,12 +187,10 @@ var player = {
 	},
 	move : function(){
 		debugger
-		checkForTie();
 		if (playerCardsValue === 21){
-			$('#modal-header').text("you got blackjack!");
+			$('#modal-header').text("you got 21!");
 			this.wins();
-		}
-		if (playerCardsValue > 21){
+		} else if (playerCardsValue > 21){
 			$.each(this.playerHand, function(i, playerCard, array){
 				if(playerCard.cardType === "A"){
 					playerCardsValue -= 10;
@@ -204,12 +201,10 @@ var player = {
 				$('#modal-header').text("you bust, sucka!");
 				this.lose();
 			}
-		} 
-		if (dealerCardsValue > 17 && playerCardsValue > dealerCardsValue && playerCardsValue <= 21){
+		} else if (dealerCardsValue > 17 && playerCardsValue > dealerCardsValue && playerCardsValue <= 21){
 			modal.toggle();
 			this.wins();
-		}
-		if (playerCardsValue === 21){
+		} else if (playerCardsValue === 21){
 			$('#modal-header').text("you got 21!");
 			if (dealerCardsValue > 17){
 				this.wins();
@@ -243,7 +238,7 @@ var player = {
 		setTimeout(function(){
 			cardBackToggle();
 			modal.toggle();
-		}, 1800);
+		}, 1250);
 		$('#modal-status').text("you scored " + playerCardsValue + ". dealer scored " + dealerCardsValue +  ". you win $" + bet + "!");
 		resetBet();
 	},
@@ -251,7 +246,7 @@ var player = {
 		setTimeout(function(){
 			cardBackToggle();
 			modal.toggle();
-		}, 1800);
+		}, 1250);
 		$('#modal-status').text("you scored " + playerCardsValue + ". dealer scored " + dealerCardsValue +  ". you lose $" + bet + "!");
 		resetBet();
 	}
@@ -273,6 +268,7 @@ var dealer = {
 		$('#cards-left-in-deck').text(arrayDeckOfCards.length + " cards left in the deck!");
 	},
 	move : function (){
+		// debugger
 		if (dealerCardsValue > 21){
 			$.each(dealer.dealerHand, function(i, dealerCard, array){
 				if(dealerCard.cardType === "A"){
@@ -286,7 +282,6 @@ var dealer = {
 				this.checksValueOfHand();		
 			}
 		}
-		checkForTie();
 		if (dealerCardsValue === 21 && playerCardsValue !== 21){
 			$('modal-header').text("dealer got 21, sucka!");
 			player.lose();
@@ -301,6 +296,8 @@ var dealer = {
 		if (dealerCardsValue > 17 && playerCardsValue > dealerCardsValue && playerCardsValue <= 21){
 			player.wins();
 		}
+		checkForTie();
+
   }
 }
 
@@ -308,7 +305,6 @@ newHandButton.on('click', function(event){
     modal.toggle();
     newHand();
 })
-
 // *************BETTING****************
 $("#place-bet").on("click", function(e){
    	bet = $('input#current-bet-input').val();	
@@ -317,7 +313,7 @@ $("#place-bet").on("click", function(e){
 	playerDollars -= bet;
 	$("#account-balance").text("$" + playerDollars);
 	$("#current-bet-input").val('$0');
-	$("#animate-bet").addClass("flash");
+	$("#animate-bet h3").addClass("animated zoomIn");
 });
 
 var resetBet = function resetBet() {
@@ -326,7 +322,6 @@ var resetBet = function resetBet() {
 	$("#current-bet-input").val('');
 }
 // *************************************
-
 var cardBackToggle = function cardBackToggle(){
 	while(cardBackToggleSet===0){
 		$("#card-back").toggle();
