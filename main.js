@@ -135,7 +135,7 @@ var deal = function deal(){
 	cardBackToggleSet = 0;
 	$( "#deal" ).off("click");
 	$("#dealer-score").toggle();
-	// player.move();
+	$('#modal-header').text("");
 
 };
 
@@ -187,6 +187,7 @@ var player = {
 		$('#player-score').text(playerCardsValue);
 	},
 	move : function(){
+		debugger
 		checkForTie();
 		if (playerCardsValue === 21){
 			$('#modal-header').text("you got blackjack!");
@@ -200,18 +201,18 @@ var player = {
 				}
 			});
 			if (playerCardsValue > 21){
-				// $('#modal-header').text("you bust, sucka!");
+				$('#modal-header').text("you bust, sucka!");
 				this.lose();
 			}
 		} 
 		if (dealerCardsValue > 17 && playerCardsValue > dealerCardsValue && playerCardsValue <= 21){
 			modal.toggle();
-			player.wins();
+			this.wins();
 		}
 		if (playerCardsValue === 21){
 			$('#modal-header').text("you got 21!");
 			if (dealerCardsValue > 17){
-				player.wins();
+				this.wins();
 			}
 		}
 		checkForTie();
@@ -264,7 +265,6 @@ var dealer = {
 			dealerCardsValue = dealerCardsValue + playerCard.cardValue;
 		});
 		$('#dealer-score').text("Dealer Score is " + dealerCardsValue);
-		// $('#delascaw').text("Dealer Score is " + dealerCardsValue);
 	},
 	dealToDealer : function (){
 		var newDealerCard = arrayDeckOfCards.pop();
@@ -295,7 +295,7 @@ var dealer = {
 			player.lose();
 		}
 		if (dealerCardsValue > 21){
-			// $('#modal-header').text("dealer bust$$$$!");
+			$('#modal-header').text("dealer bust$$$$!");
 			player.wins();
 		}
 		if (dealerCardsValue > 17 && playerCardsValue > dealerCardsValue && playerCardsValue <= 21){
