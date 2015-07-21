@@ -16,12 +16,10 @@ h1{
   margin-left: 7px;
 }
 
-
-
 #container h2 {
   font-size: .45em;
   padding: 5px;
-  margin: 55px 0 0 0;
+  margin: 5px 0 0 0;
 }
 
 p {
@@ -49,7 +47,7 @@ aside {
 
 aside h2 {
 	font-size: .55em;
-	padding: 3px 1px 3px 1px;
+	padding: 15px 1px 3px 1px;
 }
 
 #player-choices {
@@ -62,7 +60,6 @@ aside h2 {
   display: inline-block;
   position: relative;
   top: -35px;
-	
 }
 
 #place-bet {
@@ -127,17 +124,25 @@ img#card-back {
   height: 135px;
   width: 97px;
   margin-left: 5px;
-  display: inline-block;
+  display: hidden;
 }
 
 #dealer-score {
+  display: hidden;
 }
 
+#cards-left-in-deck {
+  margin-left: 15px;
+}
 
 /*******MODAL*********/
-h3{
+#modal h3{
 	display: inline-block;
-	margin: 5px;
+  font-size: .55em; 
+ }
+
+#modal-header {
+  font-size: .75em;
 }
 
 #modal{
@@ -162,21 +167,17 @@ img#modal-image {
 	width: 40%;
 }
 
-.modal-header {
-  position: absolute;
-  background-color: white;
-  width: 100%;
-  border-radius: 5px;
-  text-align: center;
-  padding: 15px;
-}
-
-.modal-body {
-  width: 100%;
+.modal-message-box {
+  width: 315px;
   background-color: white;
   border-top: 2px rebeccapurple;
-  position: relative;
   top: 204px;
   margin: 5px;
+  text-align: center;
+  position: relative;
+  left: 300px;
+  border-radius: 5px;
+  padding: 26px;
+  line-height: 1.15;
 }
 /*********END - MODAL*********/

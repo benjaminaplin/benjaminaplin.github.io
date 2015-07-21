@@ -12,36 +12,33 @@
   <div id="container"> 
     <button id="deal" class="button">Deal</button>
 
-<!--     <h2 id="dealer-score"></h2> 
- -->    <div id="dealer-hand"></div>
+<!--     <h2 id="delascaw"></h2>
+ -->    <h2 id="dealer-score"><span></span></h2> 
+    <div id="dealer-hand"></div>
     <h1>Dealer Hand</h1>
 
     <h2>Your Card Value is <span id="player-score"></span></h2> 
     <div id="player-hand"></div>
     <h1>Player Hand</h1>
     <div id="player-choices">
-<!--       <button id="clear">clear</button>
- -->    </div>
+    </div>
 
   </div>  
   <div id="modal">
-    <div class="modal-content">
-    <div class="modal-body">
-    <div class="modal-header">
+    <div class="modal-message-box">
+      <div id="modal-header"></div>
       <h3 id="modal-status"></h3>
       <button id="new-hand-modal"  class="button">New Hand</button>
       <button id="new-game-modal" class="button">New Game</button>
-    </div>
-    </div>
     </div>
   </div>
   <aside>
     <div class="account">
       <h2>Current Bet</h2>
       <div class="balance">
-        <h3><p>$</p><p id="current-bet">0</p></h3>
+        <div id="animate-bet"><h3><p>$</p><p id="current-bet">0</p></h3></div>
         <input class="button" id="current-bet-input" type="text" placeholder="enter an amount" />
-        <input class="button" id="place-bet" type="button" value="bet and transform your life!!" />
+        <input class="button" id="place-bet" type="button" value="gamble your $$!!" />
       </div>
       <h2>Account Balance</h2>
       <div class="balance"><p id="account-balance"></p></div>
