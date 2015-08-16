@@ -186,7 +186,6 @@ var player = {
 		$('#player-score').text(playerCardsValue);
 	},
 	move : function(){
-		debugger
 		if (playerCardsValue === 21){
 			$('#modal-header').text("you got 21!");
 			this.wins();
