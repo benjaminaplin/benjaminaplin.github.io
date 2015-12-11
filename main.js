@@ -100,11 +100,11 @@ function shuffle(array) {
   var randomIndex;
 
   while (0 !== currentIndex) {
-  randomIndex = Math.floor(Math.random() * currentIndex);
-  currentIndex -= 1;
-  temporaryValue = array[currentIndex];
-  array[currentIndex] = array[randomIndex];
-  array[randomIndex] = temporaryValue;
+	  randomIndex = Math.floor(Math.random() * currentIndex);
+	  currentIndex -= 1;
+	  temporaryValue = array[currentIndex];
+	  array[currentIndex] = array[randomIndex];
+	  array[randomIndex] = temporaryValue;
   }
   return array;
 }
@@ -125,10 +125,10 @@ var deal = function deal(){
 		dealer.dealToDealer();
 		}, 200);
 	setTimeout(function(){
-		player.dealToPlayer();
+		dealer.dealToPlayer();
 		}, 500);
 	setTimeout(function(){
-		player.dealToPlayer();
+		dealer.dealToPlayer();
 		}, 1000);
 	setTimeout(function(){
 		dealer.dealToDealer();
@@ -211,16 +211,10 @@ var player = {
 		}
 		checkForTie();
 	},
-	dealToPlayer : function(){
-		var newPlayerCard = arrayDeckOfCards.pop();
-		this.playerHand.push(newPlayerCard);
-		$('div#player-hand').append('<div class="card"><img src="assets/card_images/' + newPlayerCard.cardImage + ' "class="card animated bounceInUp"></div>');		
-		$('#cards-left-in-deck').text(arrayDeckOfCards.length + " cards left in the deck!");	
-	},
 	choice : function(){
 		$('#player-choices').append('<button id="hit">hit</button><button id="stand">stand</button>');
 		$('#hit').on("click", function(event){
-			player.dealToPlayer();
+			dealer.dealToPlayer();
 			player.checksValueOfHand();
 			player.move();	
 		});
@@ -266,6 +260,12 @@ var dealer = {
 		$('div#dealer-hand').append('<div class="card"><img src="assets/card_images/' + newDealerCard.cardImage + ' "class="card animated bounceInDown"></div>')
 		$('#cards-left-in-deck').text(arrayDeckOfCards.length + " cards left in the deck!");
 	},
+	dealToPlayer : function(){
+		var newPlayerCard = arrayDeckOfCards.pop();
+		player.playerHand.push(newPlayerCard);
+		$('div#player-hand').append('<div class="card"><img src="assets/card_images/' + newPlayerCard.cardImage + ' "class="card animated bounceInUp"></div>');		
+		$('#cards-left-in-deck').text(arrayDeckOfCards.length + " cards left in the deck!");	
+	},
 	move : function (){
 		// debugger
 		if (dealerCardsValue > 21){
@@ -301,12 +301,12 @@ var dealer = {
 }
 
 newHandButton.on('click', function(event){
-    modal.toggle();
-    newHand();
+  modal.toggle();
+  newHand();
 })
 // *************BETTING****************
 $("#place-bet").on("click", function(e){
-   	bet = $('input#current-bet-input').val();	
+ 	bet = $('input#current-bet-input').val();	
 	bet = parseInt(bet);
 	$('#current-bet').text(bet);
 	playerDollars -= bet;
